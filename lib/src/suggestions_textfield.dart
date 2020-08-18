@@ -29,7 +29,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
 
   List<String> _matches = List();
   String _helperText;
-  bool _helperCheck = true;
+  final bool _helperCheck = true;
 
   List<String> _suggestions;
   bool _constraintSuggestion;
@@ -52,6 +52,15 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
     return Stack(
       alignment: Alignment.centerLeft,
       children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color:
+                widget.tagsTextField.inputBackgroundColor ?? Colors.transparent,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          height: 48,
+          width: widget.tagsTextField.width,
+        ),
         Visibility(
           visible: _suggestions != null,
           child: Container(
@@ -90,7 +99,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
           decoration: _initialInputDecoration,
           onChanged: (str) => _checkOnChanged(str),
           onSubmitted: (str) => _onSubmitted(str),
-        )
+        ),
       ],
     );
   }
@@ -159,10 +168,6 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
       if (_matches.length > 1) _matches.removeWhere((String mtc) => mtc == str);
 
       setState(() {
-        _helperCheck =
-            _matches.isNotEmpty || str.isEmpty || !_constraintSuggestion
-                ? true
-                : false;
         _matches.sort((a, b) => a.compareTo(b));
       });
     }
@@ -174,27 +179,29 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
 
 /// Tags TextField
 class TagsTextField {
-  TagsTextField(
-      {this.lowerCase = false,
-      this.textStyle = const TextStyle(fontSize: 14),
-      this.width = 200,
-      this.enabled = true,
-      this.duplicates = false,
-      this.suggestions,
-      this.constraintSuggestion = true,
-      this.autocorrect,
-      this.autofocus,
-      this.hintText,
-      this.hintTextColor,
-      this.suggestionTextColor,
-      this.helperText,
-      this.helperTextStyle,
-      this.keyboardType,
-      this.textCapitalization,
-      this.maxLength,
-      this.inputDecoration,
-      this.onSubmitted,
-      this.onChanged});
+  TagsTextField({
+    this.lowerCase = false,
+    this.textStyle = const TextStyle(fontSize: 14),
+    this.width = 200,
+    this.enabled = true,
+    this.duplicates = false,
+    this.suggestions,
+    this.constraintSuggestion = true,
+    this.autocorrect,
+    this.autofocus,
+    this.hintText,
+    this.hintTextColor,
+    this.suggestionTextColor,
+    this.helperText,
+    this.helperTextStyle,
+    this.keyboardType,
+    this.textCapitalization,
+    this.maxLength,
+    this.inputDecoration,
+    this.onSubmitted,
+    this.onChanged,
+    this.inputBackgroundColor,
+  });
 
   final double width;
   final bool enabled;
@@ -211,6 +218,7 @@ class TagsTextField {
   final String hintText;
   final Color hintTextColor;
   final Color suggestionTextColor;
+  final Color inputBackgroundColor;
   final String helperText;
   final TextStyle helperTextStyle;
   final TextInputType keyboardType;
