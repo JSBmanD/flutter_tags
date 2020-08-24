@@ -56,7 +56,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
           decoration: BoxDecoration(
             color:
                 widget.tagsTextField.inputBackgroundColor ?? Colors.transparent,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
           ),
           height: 48,
           width: widget.tagsTextField.width,
@@ -130,7 +130,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
         helperText: _helperCheck || _suggestions == null ? null : _helperText,
         helperStyle: widget.tagsTextField.helperTextStyle,
         hintText: widget.tagsTextField.hintText ?? 'Add a tag',
-        hintStyle: TextStyle(color: widget.tagsTextField.hintTextColor));
+        hintStyle: widget.tagsTextField.hintTextStyle);
   }
 
   ///OnSubmitted
@@ -190,10 +190,10 @@ class TagsTextField {
     this.autocorrect,
     this.autofocus,
     this.hintText,
-    this.hintTextColor,
     this.suggestionTextColor,
     this.helperText,
     this.helperTextStyle,
+    this.hintTextStyle,
     this.keyboardType,
     this.textCapitalization,
     this.maxLength,
@@ -216,11 +216,11 @@ class TagsTextField {
   final bool lowerCase;
   final bool autofocus;
   final String hintText;
-  final Color hintTextColor;
   final Color suggestionTextColor;
   final Color inputBackgroundColor;
   final String helperText;
   final TextStyle helperTextStyle;
+  final TextStyle hintTextStyle;
   final TextInputType keyboardType;
   final TextCapitalization textCapitalization;
   final int maxLength;
