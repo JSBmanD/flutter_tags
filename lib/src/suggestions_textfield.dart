@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // InputSuggestions version 0.0.1
 // currently yield inline suggestions
@@ -30,6 +31,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
   List<String> _matches = List();
   String _helperText;
   final bool _helperCheck = true;
+  final textFieldRegex = RegExInputFormatter.withRegex('[а-яА-Яa-zA-Z0-9]{0,}');
 
   List<String> _suggestions;
   bool _constraintSuggestion;
@@ -97,6 +99,7 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
           style: widget.tagsTextField.textStyle.copyWith(
               height: widget.tagsTextField.textStyle.height == null ? 1 : null),
           decoration: _initialInputDecoration,
+          inputFormatters: [textFieldRegex],
           onChanged: (str) => _checkOnChanged(str),
           onSubmitted: (str) => _onSubmitted(str),
         ),
@@ -174,6 +177,50 @@ class _SuggestionsTextFieldState extends State<SuggestionsTextField> {
 
     if (widget.tagsTextField.onChanged != null)
       widget.tagsTextField.onChanged(str);
+  }
+}
+
+class RegExInputFormatter implements TextInputFormatter {
+  final RegExp _regExp;
+
+  RegExInputFormatter._(this._regExp);
+
+  factory RegExInputFormatter.withRegex(String regexString) {
+    try {
+      final regex = RegExp(regexString);
+      return RegExInputFormatter._(regex);
+    } catch (e) {
+      // Something not right with regex string.
+      assert(false, e.toString());
+      return null;
+    }
+  }
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final oldValueValid = _isValid(oldValue.text);
+    final newValueValid = _isValid(newValue.text);
+    if (oldValueValid && !newValueValid) {
+      return oldValue;
+    }
+    return newValue;
+  }
+
+  bool _isValid(String value) {
+    try {
+      final matches = _regExp.allMatches(value);
+      for (Match match in matches) {
+        if (match.start == 0 && match.end == value.length) {
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      // Invalid regex
+      assert(false, e.toString());
+      return true;
+    }
   }
 }
 
